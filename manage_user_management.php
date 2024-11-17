@@ -6,6 +6,19 @@ $name = '';
 $department_id = '';
 $password = '';
 $status = '1';  // Default status, bisa disesuaikan sesuai kebutuhan
+$departments = []; // Array to store department list
+$Id_department =1;
+
+// Fetch departments from the database
+$dept_query = mysqli_query($con, "SELECT id_department, Nama_department FROM tbl_department");
+
+if ($dept_query === false) {
+    die("Error fetching departments: " . mysqli_error($con));
+}
+
+while ($dept_row = mysqli_fetch_assoc($dept_query)) {
+    $departments[] = $dept_row;
+}
 
 $msg = '';
 if (isset($_GET['id']) && $_GET['id'] != '') {
@@ -18,6 +31,21 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         $department_id = $row['Id_Departement'];
         $password = $row['Password'];
         $status = $row['Status'];
+
+
+
+    // Tandai department yang sesuai dengan Id_department
+    foreach ($departments as &$department) {
+        // var_dump($department_id);
+        // var_dump($department['id_department'] );
+        // die();
+        if ($department['id_department'] == $department_id) {
+            $department['selected'] = true;
+            break; // Keluar dari loop setelah menemukan kecocokan
+        }
+    }
+    unset($department); // Menghindari referensi tidak sengaja ke elemen terakhir
+
     } else {
         header('location:user_management.php');
         die();
@@ -26,7 +54,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 
 if (isset($_POST['submit'])) {
     $name = get_safe_value($con, $_POST['name']);
-    $department_id = get_safe_value($con, $_POST['department_id']);
+    $department_id = get_safe_value($con, $_POST['id_department']);
     $password = get_safe_value($con, $_POST['password']);
     $status = get_safe_value($con, $_POST['status']);
 
@@ -46,6 +74,9 @@ if (isset($_POST['submit'])) {
     }
 
     if ($msg == '') {
+
+     
+
         if (isset($_GET['id']) && $_GET['id'] != '') {
             $update_sql = "UPDATE tbl_user SET Name='$name', Password='$password', Id_Departement='$department_id', Status='$status' WHERE Id_User='$id'";
             mysqli_query($con, $update_sql);
@@ -72,12 +103,20 @@ if (isset($_POST['submit'])) {
 
                             <div class="form-group">
                                 <label for="password" class="form-control-label">Password</label>
-                                <input type="text" name="password" placeholder="Enter password" class="form-control" required value="<?php echo $password; ?>">
+                                <input type="password" name="password" placeholder="Enter password" class="form-control" required value="<?php echo $password; ?>">
                             </div>
 
                             <div class="form-group">
-                                <label for="department_id" class="form-control-label">Department</label>
-                                <input type="text" name="department_id" placeholder="Enter department ID" class="form-control" required value="<?php echo $department_id; ?>">
+                            <label for="id_department" class="form-control-label">Department</label>
+                            <select name="id_department" class="form-control" required>
+                                <option value="" <?php echo empty($Id_department) ? 'selected' : ''; ?>>Select Department</option>
+                                <?php foreach ($departments as $department) { ?>
+                                    <option value="<?php echo $department['id_department']; ?>" 
+                                        <?php echo ($department['id_department'] == $department_id) ? 'selected' : ''; ?>>
+                                        <?php echo $department['Nama_department']; ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
                             </div>
 
                             <div class="form-group">

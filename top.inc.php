@@ -24,7 +24,12 @@ if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']!=''){
       <link rel="stylesheet" href="assets/css/flag-icon.min.css">
       <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
       <link rel="stylesheet" href="assets/css/style.css">
-      <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+            <!-- DataTables CSS -->
+      <link rel="stylesheet" href="assets/css/jquery.dataTables.min.css">
+      <link rel="stylesheet" href="assets/css/buttons.dataTables.min.css">
+
+      <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'> -->
    </head>
    <body>
       <aside id="left-panel" class="left-panel">
@@ -51,12 +56,12 @@ if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']!=''){
          <header id="header" class="header">
             <div class="top-left">
                <div class="navbar-header">
+                  <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                   <a class="" href="index.php">                     
                      <img src="images/Mylogo_new.png" alt="Logo" class="img-fluid" style="max-width: 20px;">
                      <label style="font-size: 20px !important;font-weight: bold !important;">Nssnmf</label> 
                   </a>
-                  <a class="navbar-brand hidden" href="index.php"><img src="images/Mylogo_new.png" alt="Logo"></a>
-                  <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+                  <a class="navbar-brand hidden" href="index.php"><img src="images/Mylogo_new.png" alt="Logo"></a>                  
                </div>
             </div>
             <div class="top-right">

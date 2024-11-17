@@ -22,61 +22,73 @@ if(isset($_GET['type']) && $_GET['type']!=''){
 	}
 }
 
-$sql="select * from tbl_department order by Nama_department asc";
-$res=mysqli_query($con,$sql);
+
 ?>
-<div class="content pb-0">
-	<div class="orders">
-	   <div class="row">
-		  <div class="col-xl-12">
-			 <div class="card">
-				<div class="card-body">
-				   <h4 class="box-title">Department </h4>
-				   <h4 class="box-link"><a href="manage_department.php">ADD Department</a> </h4>
-				</div>
-				<div class="card-body--">
-				   <div class="table-stats order-table ov-h">
-					  <table class="table ">
-						 <thead>
-							<tr>
-							   <th class="serial">#</th>
-							   <th>ID</th>
-							   <th>Department</th>
-							   <th></th>
-							</tr>
-						 </thead>
-						 <tbody>
-							<?php 
-							$i=1;
-							while($row=mysqli_fetch_assoc($res)){?>
-							<tr>
-							   <td class="serial"><?php echo $i++?></td>
-							   <td><?php echo $row['Id_department']?></td>
-							   <td><?php echo $row['Nama_department']?></td>
-							   <td>
-								<?php
-								// if($row['status']==1){
-								// 	echo "<span class='badge badge-complete'><a href='?type=status&operation=deactive&id=".$row['Id_department']."'>Active</a></span>&nbsp;";
-								// }else{
-								// 	echo "<span class='badge badge-pending'><a href='?type=status&operation=active&id=".$row['idId_department']."'>Deactive</a></span>&nbsp;";
-								// }
-								echo "<span class='badge badge-edit'><a href='manage_department.php?id=".$row['Id_department']."'>Edit</a></span>&nbsp;";
-								
-								echo "<span class='badge badge-delete'><a href='?type=delete&id=".$row['Id_department']."'>Delete</a></span>";
-								
-								?>
-							   </td>
-							</tr>
-							<?php } ?>
-						 </tbody>
-					  </table>
-				   </div>
-				</div>
-			 </div>
-		  </div>
-	   </div>
-	</div>
+
+<style>
+	table.dataTable {
+    width: 100%;
+    margin: 0 auto;
+}
+
+table.dataTable td, table.dataTable th {
+    white-space: nowrap;
+}
+</style>
+
+<div class="content mt-3">
+   <table id="adminTable" class="display nowrap" style="width:100%">
+   <thead>
+			<tr>
+				<th class="serial">#</th>
+				<th>ID</th>
+				<th>Department</th>
+				<th></th>
+			</tr>
+	</thead>
+      <tbody>
+         <?php
+         $result = mysqli_query($con, "select * from tbl_department order by Nama_department asc");
+         $no = 1;
+         while($row = mysqli_fetch_assoc($result)){
+         ?>
+         <tr>
+            <td><?php echo $no++ ?></td>
+            <td><?php echo $row['Id_department'] ?></td>
+            <td><?php echo $row['Nama_department'] ?></td>
+            <td>
+               <a href="manage_department.php?id=<?php echo $row['Id_department'] ?>">Edit</a> |
+			   <a href='?type=delete&id=<?php echo $row['Id_department']; ?>' 
+				onclick="return confirm('Are you sure you want to delete this department?');">
+				Delete
+				</a>
+            </td>
+         </tr>
+         <?php } ?>
+      </tbody>
+   </table>
 </div>
+
 <?php
 require('footer.inc.php');
 ?>
+
+<script>
+$(document).ready(function () {
+    $('#adminTable').DataTable({
+        dom: 'Bfrtip', // Layout dengan tombol
+		buttons: [
+            {
+                text: 'Create', // Label tombol
+                action: function () {
+                    window.location.href = 'manage_department.php'; // Redirect ke link
+                }
+            },
+            'csv', 'excel', 'pdf', 'print'
+        ],
+        responsive: true, // Membuat tabel responsif
+        paging: true, // Menambahkan pagination
+        searching: true // Menambahkan fitur pencarian
+    });
+});
+</script>

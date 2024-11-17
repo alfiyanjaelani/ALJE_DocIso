@@ -19,65 +19,101 @@ if(isset($_GET['type']) && $_GET['type']!=''){
 	}
 }
 
-$sql = "SELECT * FROM tbl_user ORDER BY Id_User DESC";
-$res = mysqli_query($con, $sql);
+
+
 ?>
-<div class="content pb-0">
-	<div class="orders">
-	   <div class="row">
-		  <div class="col-xl-12">
-			 <div class="card">
-				<div class="card-body">
-				   <h4 class="box-title">User List</h4>
-				   <h4 class="box-link"><a href="manage_user_management.php">ADD User</a> </h4>
-				</div>
-				<div class="card-body--">
-				   <div class="table-stats order-table ov-h">
-					  <table class="table">
-						 <thead>
-							<tr>
-							   <th class="serial">#</th>
-							   <th width="10%">ID</th>
-							   <th width="20%">Name</th>
-							   <th width="20%">Password</th>
-							   <th width="20%">Department ID</th>
-							   <th width="10%">Status</th>
-							   <th width="20%">Actions</th>
-							</tr>
-						 </thead>
-						 <tbody>
-							<?php 
-							$i = 1;
-							while($row = mysqli_fetch_assoc($res)){?>
-							<tr>
-							   <td class="serial"><?php echo $i?></td>
-							   <td><?php echo $row['Id_User']?></td>
-							   <td><?php echo $row['Name']?></td>
-							   <td><?php echo $row['Password']?></td>
-							   <td><?php echo $row['Id_Departement']?></td>
-							   <td><?php echo $row['Status'] == 1 ? 'Active' : 'Inactive'?></td>
-							   <td>
-								<?php
-								if($row['Status'] == 1){
-									echo "<span class='badge badge-complete'><a href='?type=status&operation=deactive&id=".$row['Id_User']."'>Active</a></span>&nbsp;";
-								}else{
-									echo "<span class='badge badge-pending'><a href='?type=status&operation=active&id=".$row['Id_User']."'>Inactive</a></span>&nbsp;";
-								}
-								echo "<span class='badge badge-edit'><a href='manage_user_management.php?id=".$row['Id_User']."'>Edit</a></span>&nbsp;";
-								echo "<span class='badge badge-delete'><a href='?type=delete&id=".$row['Id_User']."'>Delete</a></span>";
-								?>
-							   </td>
-							</tr>
-							<?php $i++; } ?>
-						 </tbody>
-					  </table>
-				   </div>
-				</div>
-			 </div>
-		  </div>
-	   </div>
-	</div>
+
+<style>
+	table.dataTable {
+    width: 100%;
+    margin: 0 auto;
+}
+
+table.dataTable td, table.dataTable th {
+    white-space: nowrap;
+}
+</style>
+<div class="content mt-3">
+   <table id="userTable" class="display nowrap" style="width:100%">
+      <thead>
+         <tr>
+            <th class="serial">#</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Departement</th>
+            <th>Password</th>
+            <th>Status</th>
+            <th>Actions</th>
+         </tr>
+      </thead>
+      <tbody>
+			<?php
+		// Query SQL
+		$query = "SELECT * FROM vw_user ORDER BY Name ASC";
+		$result = mysqli_query($con, $query);
+
+		// Periksa apakah query berhasil
+		if (!$result) {
+			// Jika query gagal, tampilkan pesan kesalahan
+			echo "Error: " . mysqli_error($con);
+			exit; // Keluar dari skrip jika query gagal
+		}
+
+		$no = 1;
+		while ($row = mysqli_fetch_assoc($result)) {
+		?>
+		<tr>
+			<td><?php echo $no++; ?></td>
+			<td><?php echo $row['Id_User']; ?></td>
+			<td><?php echo $row['Name']; ?></td>
+			<td><?php echo $row['Nama_department']; ?></td>
+			<td>
+			<input 
+                type="password" 
+                value="<?php echo htmlspecialchars($row['Password']); ?>" 
+                readonly 
+                class="form-control border-0 bg-transparent"
+            />
+			</td>
+			<td><?php echo $row['Status_user']; ?></td>
+			<td>
+				<a href="manage_user_management.php?id=<?php echo $row['Id_User']; ?>">Edit</a> |
+				<a href="?type=delete&id=<?php echo $row['Id_User']; ?>" 
+				onclick="return confirm('Are you sure you want to delete this user?');">
+				Delete
+				</a>
+			</td>
+			
+		</tr>
+		<?php 
+		}
+		?>
+
+      </tbody>
+   </table>
 </div>
+
 <?php
 require('footer.inc.php');
 ?>
+
+
+<script>
+$(document).ready(function () {
+    $('#userTable').DataTable({
+        dom: 'Bfrtip', // Layout dengan tombol
+		buttons: [
+            {
+                text: 'Create', // Label tombol
+                action: function () {
+                    window.location.href = 'manage_user_management.php'; // Redirect ke link
+                }
+            },
+            'csv', 'excel', 'pdf', 'print'
+        ],
+        responsive: true, // Membuat tabel responsif
+        paging: true, // Menambahkan pagination
+        searching: true // Menambahkan fitur pencarian
+    });
+});
+</script>
