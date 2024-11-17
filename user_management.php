@@ -34,6 +34,8 @@ table.dataTable td, table.dataTable th {
 }
 </style>
 <div class="content mt-3">
+<div class="card">
+<div class="card-header">
    <table id="userTable" class="display nowrap" style="width:100%">
       <thead>
          <tr>
@@ -90,7 +92,10 @@ table.dataTable td, table.dataTable th {
 		?>
 
       </tbody>
+	
    </table>
+   </div>
+   </div>
 </div>
 
 <?php

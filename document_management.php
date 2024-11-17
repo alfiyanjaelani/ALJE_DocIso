@@ -37,6 +37,8 @@ if (isset($_GET['type']) && $_GET['type'] != '') {
 </style>
 
 <div class="content mt-3">
+<div class="card">
+<div class="card-header">
    <table id="dokumenIsoTable" class="display nowrap" style="width:100%">
       <thead>
          <tr>
@@ -90,6 +92,8 @@ if (isset($_GET['type']) && $_GET['type'] != '') {
             ?>
       </tbody>
    </table>
+</div>
+</div>
 </div>
 
 <?php
