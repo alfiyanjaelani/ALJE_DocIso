@@ -58,7 +58,7 @@ if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']!=''){
                <div class="navbar-header">
                   <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                   <a class="" href="index.php">                     
-                     <img src="images/Mylogo_new.png" alt="Logo" class="img-fluid" style="max-width: 20px;">
+                     <img src="images/Mylogo.jpeg" alt="Logo" class="img-fluid" style="max-width: 20px;">
                      <label style="font-size: 20px !important;font-weight: bold !important;">Nssnmf</label> 
                   </a>
                   <a class="navbar-brand hidden" href="index.php"><img src="images/Mylogo_new.png" alt="Logo"></a>                  
